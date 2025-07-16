@@ -1,16 +1,22 @@
-FROM node:18-alpine
+FROM node:18-slim
 
 WORKDIR /app
 
-# Copy lại package.json & package-lock.json
+# Copy dependencies
 COPY package*.json ./
-
-# ✅ Cài full dependencies, không thiếu tsx
 RUN npm install
 
+# Copy source
 COPY . .
 
+# ✅ Build frontend và backend
+RUN npm run build
+
+# ✅ Push schema DB sau khi build
+RUN npm run db:push
+
+# Mở port
 EXPOSE 5000
 
-# ✅ Gọi trực tiếp tsx thay vì npm để loại trừ lỗi PATH
-CMD ["npx", "tsx", "server/index.ts"]
+# ✅ Chạy backend đã build
+CMD ["npm", "run", "start"]
