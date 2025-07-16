@@ -52,4 +52,4 @@ jobs:
         run: docker compose -f docker-compose.yaml pull
 
       - name: Deploy container
-        run: docker compose -f docker-compose.yaml -p tradiva_backend up -d
+        run: docker compose -f docker-compose.yaml -p bright_way up -d
