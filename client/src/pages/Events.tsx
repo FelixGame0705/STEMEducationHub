@@ -10,84 +10,100 @@ import type { Event } from "@shared/schema";
 export default function Events() {
   const [activeTab, setActiveTab] = useState<"upcoming" | "all">("upcoming");
 
-const { data, isLoading } = useQuery<{ events: Event[]; total: number }>({
-  queryKey: ["/api/events", activeTab],
-  queryFn: async () => {
-    const params = new URLSearchParams();
-    if (activeTab === "upcoming") params.append("upcoming", "true");
+  const { data, isLoading } = useQuery<{ events: Event[]; total: number }>({
+    queryKey: ["/api/events", activeTab],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (activeTab === "upcoming") params.append("upcoming", "true");
 
-    const res = await fetch(`/api/events?${params}`);
-    return res.json();
-  },
-});
+      const res = await fetch(`/api/events?${params}`);
+      return res.json();
+    },
+  });
 
-const events = data?.events || [];
+  const events = data?.events || [];
 
   return (
-    <div className="py-8 px-4">
-      <h1 className="text-3xl font-bold mb-2">Sự kiện</h1>
-      <p className="text-gray-600 mb-6">
-        Tham gia các sự kiện STEM thú vị và bổ ích
-      </p>
-
-      <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as any)} className="mb-6">
-        <TabsList className="grid w-full max-w-xs mx-auto grid-cols-2">
-          <TabsTrigger value="upcoming">Sắp tới</TabsTrigger>
-          <TabsTrigger value="all">Tất cả</TabsTrigger>
-        </TabsList>
-      </Tabs>
-
-      {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className="h-48 w-full rounded-xl" />
-          ))}
+    <div className="min-h-screen py-20 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Sự kiện
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Tham gia các sự kiện STEM thú vị và bổ ích
+          </p>
         </div>
-      ) : events.length === 0 ? (
-        <div className="text-center text-gray-500 py-12">
-          {activeTab === "upcoming"
-            ? "Không có sự kiện sắp tới."
-            : "Không có sự kiện nào."}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {events.map((event) => (
-            <div key={event.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-              <img
-                src={event.image}
-                alt={event.title}
-                className="w-full h-40 object-cover rounded-lg mb-4"
-              />
-              <div>
-                <h3 className="text-lg font-semibold mb-1">{event.title}</h3>
-                <p className="text-sm text-gray-600 mb-2">{event.description}</p>
 
-                <div className="text-sm text-gray-500 space-y-1 mb-2">
-                  <div className="flex items-center">
-                    <Calendar className="w-4 h-4 mr-1" />
-                    {new Date(event.startDate).toLocaleDateString("vi-VN")} –{" "}
-                    {new Date(event.endDate).toLocaleDateString("vi-VN")}
+        <Tabs
+          value={activeTab}
+          onValueChange={(val) => setActiveTab(val as any)}
+          className="mb-6"
+        >
+          <TabsList className="grid w-full max-w-xs mx-auto grid-cols-2">
+            <TabsTrigger value="upcoming">Sắp tới</TabsTrigger>
+            <TabsTrigger value="all">Tất cả</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <Skeleton key={i} className="h-48 w-full rounded-xl" />
+            ))}
+          </div>
+        ) : events.length === 0 ? (
+          <div className="text-center text-gray-500 py-12">
+            {activeTab === "upcoming"
+              ? "Không có sự kiện sắp tới."
+              : "Không có sự kiện nào."}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {events.map((event) => (
+              <div
+                key={event.id}
+                className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between"
+              >
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  className="w-full h-40 object-cover rounded-lg mb-4"
+                />
+                <div>
+                  <h3 className="text-lg font-semibold mb-1">{event.title}</h3>
+                  <p className="text-sm text-gray-600 mb-2">
+                    {event.description}
+                  </p>
+
+                  <div className="text-sm text-gray-500 space-y-1 mb-2">
+                    <div className="flex items-center">
+                      <Calendar className="w-4 h-4 mr-1" />
+                      {new Date(event.startDate).toLocaleDateString(
+                        "vi-VN"
+                      )} – {new Date(event.endDate).toLocaleDateString("vi-VN")}
+                    </div>
+                    <div className="flex items-center">
+                      <MapPin className="w-4 h-4 mr-1" />
+                      {event.location}
+                    </div>
                   </div>
-                  <div className="flex items-center">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {event.location}
-                  </div>
+
+                  {event.registrationRequired && (
+                    <Badge className="bg-orange-100 text-orange-800 text-xs mb-2">
+                      Cần đăng ký
+                    </Badge>
+                  )}
                 </div>
 
-                {event.registrationRequired && (
-                  <Badge className="bg-orange-100 text-orange-800 text-xs mb-2">
-                    Cần đăng ký
-                  </Badge>
-                )}
+                <Button className="mt-4 w-full bg-ocean-blue text-white hover:bg-blue-700">
+                  Tìm hiểu thêm
+                </Button>
               </div>
-
-              <Button className="mt-4 w-full bg-ocean-blue text-white hover:bg-blue-700">
-                Tìm hiểu thêm
-              </Button>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

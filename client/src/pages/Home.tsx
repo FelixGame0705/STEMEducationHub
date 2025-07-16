@@ -4,11 +4,14 @@ import ProgramCard from "@/components/ProgramCard";
 import StudentCard from "@/components/StudentCard";
 import NewsCard from "@/components/NewsCard";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
 import type { Program, Student, News } from "@shared/schema";
+import { Link } from "wouter";
 
 export default function Home() {
-  const { data: programsData, isLoading: programsLoading } = useQuery<{programs: Program[], pagination: any}>({
+  const { data: programsData, isLoading: programsLoading } = useQuery<{
+    programs: Program[];
+    pagination: any;
+  }>({
     queryKey: ["/api/programs"],
     queryFn: async () => {
       const res = await fetch("/api/programs?limit=6");
@@ -16,7 +19,10 @@ export default function Home() {
     },
   });
 
-  const { data: studentsData, isLoading: studentsLoading } = useQuery<{students: Student[], pagination: any}>({
+  const { data: studentsData, isLoading: studentsLoading } = useQuery<{
+    students: Student[];
+    pagination: any;
+  }>({
     queryKey: ["/api/students"],
     queryFn: async () => {
       const res = await fetch("/api/students?limit=6");
@@ -24,7 +30,10 @@ export default function Home() {
     },
   });
 
-  const { data: newsData, isLoading: newsLoading } = useQuery<{news: News[], pagination: any}>({
+  const { data: newsData, isLoading: newsLoading } = useQuery<{
+    news: News[];
+    pagination: any;
+  }>({
     queryKey: ["/api/news"],
     queryFn: async () => {
       const res = await fetch("/api/news?featured=true&limit=6");
@@ -39,7 +48,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <Hero />
-      
+
       {/* Programs Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,7 +57,8 @@ export default function Home() {
               Chương trình học tiêu biểu
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Khám phá các chương trình STEM đa dạng được thiết kế phù hợp với từng độ tuổi
+              Khám phá các chương trình STEM đa dạng được thiết kế phù hợp với
+              từng độ tuổi
             </p>
           </div>
 
@@ -89,7 +99,10 @@ export default function Home() {
           {studentsLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-gray-50 rounded-xl p-6 animate-pulse">
+                <div
+                  key={i}
+                  className="bg-gray-50 rounded-xl p-6 animate-pulse"
+                >
                   <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-4"></div>
                   <div className="h-4 bg-gray-300 rounded mb-2"></div>
                   <div className="h-3 bg-gray-300 rounded mb-3"></div>
@@ -138,7 +151,10 @@ export default function Home() {
           {newsLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-white rounded-xl overflow-hidden animate-pulse">
+                <div
+                  key={i}
+                  className="bg-white rounded-xl overflow-hidden animate-pulse"
+                >
                   <div className="w-full h-48 bg-gray-300"></div>
                   <div className="p-6">
                     <div className="h-4 bg-gray-300 rounded mb-3"></div>
@@ -166,13 +182,19 @@ export default function Home() {
             Sẵn sàng bắt đầu hành trình STEM?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Đăng ký ngay để con được trải nghiệm buổi học thử miễn phí và khám phá niềm đam mê với công nghệ
+            Đăng ký ngay để con được trải nghiệm buổi học thử miễn phí và khám
+            phá niềm đam mê với công nghệ
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-accent-orange text-white px-8 py-3 hover:bg-orange-600 font-semibold">
-              <Link href="/lien-he">Đăng ký học thử miễn phí</Link>
-            </Button>
-            <Button variant="outline" className="border-2 border-white text-blue-500 px-8 py-3 hover:bg-white hover:text-ocean-blue font-semibold">
+            <Link href="/lien-he">
+              <Button className="bg-accent-orange text-white px-8 py-3 hover:bg-orange-600 font-semibold">
+                Đăng ký học thử miễn phí
+              </Button>
+            </Link>
+            <Button
+              variant="outline"
+              className="border-2 border-white text-blue-500 px-8 py-3 hover:bg-white hover:text-ocean-blue font-semibold"
+            >
               Tư vấn chương trình học
             </Button>
           </div>
