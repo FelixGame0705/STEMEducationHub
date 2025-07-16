@@ -45,15 +45,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Down Server and remove old image
-        run: docker compose -f docker-compose.yml -p bright_way down --rmi all
-        working-directory: STEMEducationHub
+        run: docker compose -f docker-compose.yaml -p bright_way down --rmi all
         continue-on-error: true
 
       - name: Pull new image
-        run: docker compose -f docker-compose.yml pull
-        working-directory: STEMEducationHub
+        run: docker compose -f docker-compose.yaml pull
 
       - name: Deploy container
-        run: docker compose -f docker-compose.yml -p bright_way up -d
-        working-directory: STEMEducationHub
-
+        run: docker compose -f docker-compose.yaml -p bright_way up -d
