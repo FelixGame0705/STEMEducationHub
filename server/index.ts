@@ -1,6 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 app.use(express.json());
@@ -29,7 +28,7 @@ app.use((req, res, next) => {
         logLine = logLine.slice(0, 79) + "…";
       }
 
-      log(logLine);
+      console.log(logLine); // Use console.log instead of imported log
     }
   });
 
@@ -47,27 +46,31 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    const { setupVite } = await import('./vite.js');
-    await setupVite(app, server);
+  // Fix: Only import vite-related stuff in development
+  if (process.env.NODE_ENV === "development") {
+    try {
+      const { setupVite } = await import('./vite.js');
+      await setupVite(app, server);
+    } catch (err) {
+      console.log("Development vite setup failed:", err);
+    }
   } else {
-    const { serveStatic } = await import('./vite.js');
-    serveStatic(app);
+    // In production, serve static files directly
+    const path = await import('path');
+    app.use(express.static(path.join(process.cwd(), 'client')));
+    
+    // Catch-all handler for SPA
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'client', 'index.html'));
+    });
   }
 
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
   server.listen({
     port,
     host: "0.0.0.0",
     reusePort: true,
   }, () => {
-    log(`serving on port ${port}`);
+    console.log(`serving on port ${port}`);
   });
 })();

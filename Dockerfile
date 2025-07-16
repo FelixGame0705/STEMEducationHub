@@ -1,33 +1,54 @@
-# ========= STAGE 1: BUILD ==========
-FROM node:18 AS builder
+# ========== BUILD STAGE ==========
+FROM node:20 AS builder
 
 WORKDIR /app
 
-# ✅ Chỉ copy file cần thiết để cài đúng platform (Linux)
+# Copy files để install đúng platform
 COPY package*.json ./
+
+# Install all dependencies including dev
 RUN npm install
 
-# ✅ Sau khi cài đúng, mới copy toàn bộ mã nguồn
+# Copy code vào sau khi cài xong
 COPY . .
 
-# ✅ Build frontend + backend
-RUN npm run build
-RUN npm run db:push || echo "Skipping drizzle push"
+# Debug build process
+RUN echo "=== Building ===" && \
+    npm run build && \
+    echo "=== Build output ===" && \
+    ls -la dist/ && \
+    echo "=== dist/index.js preview ===" && \
+    head -20 dist/index.js || echo "No dist/index.js found"
 
-# ========= STAGE 2: RUNTIME ==========
-FROM node:18-slim
+# ========== RUNTIME STAGE ==========
+FROM node:20-slim
 
 WORKDIR /app
 
-# ✅ Copy các file cần thiết đã build, KHÔNG copy node_modules từ host
+# Install only what's needed for runtime
+RUN apt-get update && apt-get install -y dumb-init && rm -rf /var/lib/apt/lists/*
+
+# Copy built files
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/client ./client
-COPY --from=builder /app/shared ./shared
 COPY --from=builder /app/package*.json ./
 
-# ✅ Cài lại dependencies chỉ cho production (dev deps bị loại bỏ)
-RUN npm install --omit=dev
+# Install ONLY production dependencies
+RUN npm ci --omit=dev --ignore-scripts
+
+# Debug runtime
+RUN echo "=== Runtime debug ===" && \
+    ls -la && \
+    ls -la dist/ && \
+    echo "=== Node version ===" && \
+    node --version && \
+    echo "=== Testing dist/index.js ===" && \
+    node --check dist/index.js || echo "Syntax error in dist/index.js"
 
 EXPOSE 5000
 
-CMD ["npm", "run", "start"]
+# Use dumb-init for proper signal handling
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+# Direct node execution
+CMD ["node", "dist/index.js"]
