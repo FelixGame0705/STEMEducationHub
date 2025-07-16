@@ -22,7 +22,7 @@ services:
     container_name: stem-center-app
     restart: unless-stopped
     ports:
-      - "5001:5001"
+      - "5000:5000"
     depends_on:
       - db
     environment:
