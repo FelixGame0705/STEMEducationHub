@@ -1,0 +1,129 @@
+🧠 Mục tiêu tổng thể
+Tạo một website giới thiệu trung tâm dạy học thiên về STEM dành cho học sinh tiểu học và THCS. Website có giao diện hiện đại, màu chủ đạo là xanh nước biển, dễ sử dụng, thân thiện với phụ huynh và học sinh.
+
+⚙️ Công nghệ sử dụng
+Next.js (React-based, hỗ trợ SSR/SSG)
+
+Tailwind CSS (cho giao diện nhanh, responsive)
+
+Typescript (tuỳ chọn, nếu bạn muốn code sạch và ổn định)
+
+Replit (môi trường chạy, có thể deploy bằng Vercel sau)
+
+🧩 Kiến trúc các trang chính
+1. Trang chủ (/)
+Hiển thị:
+
+Banner giới thiệu trung tâm, hình ảnh lớp học
+
+Các chương trình tiêu biểu: Otto, Microbit, Python, AI, Cloud
+
+Một số học viên tiêu biểu
+
+Tin tức/sự kiện mới nhất
+
+Button CTA: “Đăng ký học thử”, “Liên hệ”
+
+2. Chương trình học (/chuong-trinh-hoc)
+Mỗi chương trình là một card gồm:
+
+Tên chương trình (Otto, Microbit, Python, AI, Cloud)
+
+Độ tuổi phù hợp
+
+Mục tiêu học tập
+
+Hình ảnh minh hoạ
+
+Nút “Xem chi tiết” → dẫn sang trang riêng /chuong-trinh-hoc/:slug
+
+Ví dụ: /chuong-trinh-hoc/otto-robot
+
+3. Học viên tiêu biểu (/hoc-vien-tieu-bieu)
+Danh sách học sinh xuất sắc, mỗi học sinh gồm:
+
+Hình ảnh
+
+Tên, lớp
+
+Mô tả thành tích nổi bật (ví dụ: đạt giải lập trình microbit, thuyết trình tốt...)
+
+Có thể filter theo năm hoặc theo chương trình
+
+4. Tin tức (/tin-tuc)
+Blog dạng danh sách bài viết:
+
+Tiêu đề, mô tả ngắn, hình ảnh, ngày đăng
+
+Nút “Xem chi tiết” → /tin-tuc/:slug
+
+5. Sự kiện (/su-kien)
+Danh sách các sự kiện tổ chức:
+
+Tên sự kiện, thời gian, địa điểm
+
+Mô tả, hình ảnh
+
+Có thể hiển thị sự kiện sắp tới / đã qua
+
+6. Về chúng tôi (/ve-chung-toi)
+Thông tin về trung tâm:
+
+Giới thiệu sứ mệnh, tầm nhìn
+
+Đội ngũ giáo viên
+
+Cơ sở vật chất
+
+Đối tác hợp tác nếu có
+
+7. Tuyển dụng (/tuyen-dung)
+Danh sách các vị trí đang tuyển:
+
+Vị trí, mô tả công việc, yêu cầu, quyền lợi
+
+Nút “Ứng tuyển ngay” → mở form hoặc mailto
+
+8. Liên hệ (/lien-he) (có thể đặt trong footer)
+Form liên hệ: Họ tên, SĐT, Email, Nội dung
+
+Thông tin liên hệ trung tâm: địa chỉ, số điện thoại, email, fanpage
+
+🔧 Chức năng kỹ thuật
+Dynamic Routes: cho chi tiết chương trình học, tin tức, sự kiện
+
+SEO-Friendly: mỗi trang có metadata riêng (Next.js metadata)
+
+Responsive UI: hỗ trợ mobile, tablet, desktop
+
+CMS-friendly cấu trúc: bạn có thể kết nối sau này với CMS như Sanity / Strapi
+
+Tối ưu tốc độ: sử dụng ảnh dạng lazy-load, preload dữ liệu cần thiết
+
+Form liên hệ: gửi về email hoặc Firebase (tuỳ cấu hình sau này)
+
+Dark/Light mode (optional)
+
+🎨 Giao diện đề xuất
+Header
+
+Logo bên trái
+
+Menu: Chương trình học | Học viên tiêu biểu | Tin tức | Sự kiện | Về chúng tôi | Tuyển dụng | [Đăng ký học thử]
+
+Footer
+
+Thông tin liên hệ
+
+Liên kết nhanh
+
+Bản quyền
+
+🖼️ Tông màu & phong cách thiết kế
+Màu chủ đạo: Xanh nước biển (#007BFF hoặc #1E90FF)
+
+Phong cách: trẻ trung, hiện đại, có yếu tố công nghệ
+
+Font chữ: Google Fonts như "Poppins", "Nunito", hoặc "Inter"
+
+Biểu tượng: dùng icon STEM, robot, máy tính, cloud, AI...
