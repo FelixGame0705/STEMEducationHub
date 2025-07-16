@@ -1,4 +1,4 @@
-import type { Express } from "express";
+import { response, type Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { 
@@ -474,16 +474,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/admin/news/:id", async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const validatedData = insertNewsSchema.partial().parse(req.body);
-      const news = await storage.updateNews(id, validatedData);
-      res.json(news);
-    } catch (error) {
-      res.status(400).json({ error: "Failed to update news" });
-    }
-  });
+app.put("/api/admin/news/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const validatedData = insertNewsSchema.partial().parse(req.body);
+    const news = await storage.updateNews(id, validatedData);
+    res.json(news);
+  } catch (error) {
+    console.error("Update news error:", error);
+    res.status(400).json({ error: "Failed to update news" });
+  }
+});
+
 
   app.delete("/api/admin/news/:id", async (req, res) => {
     try {

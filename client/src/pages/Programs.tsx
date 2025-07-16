@@ -4,43 +4,34 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Program } from "@shared/schema";
 
 export default function Programs() {
-  const { data: programs = [], isLoading } = useQuery<Program[]>({
+  const { data, isLoading } = useQuery({
     queryKey: ["/api/programs"],
+    queryFn: () => fetch("/api/programs").then((res) => res.json()),
   });
 
-  return (
-    <div className="min-h-screen py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Chương trình học
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Khám phá các chương trình STEM đa dạng được thiết kế phù hợp với từng độ tuổi
-          </p>
-        </div>
+  // Tách mảng chương trình từ object trả về
+  const programs: Program[] = data?.programs || [];
 
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-xl p-6 space-y-4">
-                <Skeleton className="w-full h-48 rounded-lg" />
-                <Skeleton className="h-6 w-20" />
-                <Skeleton className="h-6 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-10 w-full" />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {programs.map((program) => (
-              <ProgramCard key={program.id} program={program} />
-            ))}
-          </div>
-        )}
-      </div>
+  return (
+    <div className="py-8 px-4">
+      <h1 className="text-3xl font-bold mb-2">Chương trình học</h1>
+      <p className="text-gray-600 mb-6">
+        Khám phá các chương trình STEM đa dạng được thiết kế phù hợp với từng độ tuổi
+      </p>
+
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <Skeleton key={i} className="h-48 w-full rounded-xl" />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {programs.map((program) => (
+            <ProgramCard key={program.id} program={program} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -54,8 +54,8 @@ export const events = mysqlTable("events", {
   slug: varchar("slug", { length: 255 }).notNull().unique(),
   description: text("description").notNull(),
   image: varchar("image", { length: 500 }).notNull(),
-  startDate: timestamp("start_date").notNull(),
-  endDate: timestamp("end_date").notNull(),
+  startDate: timestamp("start_date").notNull().defaultNow(),
+  endDate: timestamp("end_date").notNull().defaultNow(),
   location: varchar("location", { length: 255 }).notNull(),
   registrationRequired: boolean("registration_required").default(false),
   createdAt: timestamp("created_at").defaultNow(),
@@ -85,38 +85,66 @@ export const contacts = mysqlTable("contacts", {
   submittedAt: timestamp("submitted_at").defaultNow(),
   processed: boolean("processed").default(false),
 });
+// Helper
+export const zDateFromString = z.preprocess((val) => {
+  if (typeof val === "string" || val instanceof Date) return new Date(val);
+  return val;
+}, z.date());
 
+// Admin user
 export const insertAdminUserSchema = createInsertSchema(adminUsers).pick({
   username: true,
   password: true,
 });
 
-export const insertProgramSchema = createInsertSchema(programs).omit({
+// Programs
+export const insertProgramSchema = createInsertSchema(programs, {
+  createdAt: zDateFromString,
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertStudentSchema = createInsertSchema(students).omit({
+// Students
+export const insertStudentSchema = createInsertSchema(students, {
+  createdAt: zDateFromString,
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertNewsSchema = createInsertSchema(news).omit({
+// News
+export const insertNewsSchema = createInsertSchema(news, {
+  publishedAt: zDateFromString,
+  createdAt: zDateFromString,
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertEventSchema = createInsertSchema(events).omit({
+// Events
+export const insertEventSchema = createInsertSchema(events, {
+  startDate: zDateFromString,
+  endDate: zDateFromString,
+  createdAt: zDateFromString,
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertRecruitmentSchema = createInsertSchema(recruitments).omit({
+// Recruitments
+export const insertRecruitmentSchema = createInsertSchema(recruitments, {
+  deadline: zDateFromString,
+  createdAt: zDateFromString,
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertContactSchema = createInsertSchema(contacts).omit({
+// Contacts
+export const insertContactSchema = createInsertSchema(contacts, {
+  submittedAt: zDateFromString,
+}).omit({
   id: true,
   submittedAt: true,
   processed: true,
@@ -136,3 +164,5 @@ export type Recruitment = typeof recruitments.$inferSelect;
 export type InsertRecruitment = z.infer<typeof insertRecruitmentSchema>;
 export type Contact = typeof contacts.$inferSelect;
 export type InsertContact = z.infer<typeof insertContactSchema>;
+
+

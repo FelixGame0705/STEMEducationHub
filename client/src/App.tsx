@@ -18,6 +18,8 @@ import Contact from "@/pages/Contact";
 import NotFound from "@/pages/not-found";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminPanel from "@/pages/admin/AdminPanel";
+import AdminPrograms from "./pages/admin/AdminPrograms";
+import AdminNews from "./pages/admin/AdminNews";
 
 function Router() {
   return (
@@ -36,7 +38,10 @@ function Router() {
           <Route path="/tuyen-dung" component={Careers} />
           <Route path="/lien-he" component={Contact} />
           <Route path="/admin/login" component={AdminLogin} />
-          <Route path="/admin/*" component={AdminPanel} />
+          <Route path="/admin/" component={AdminPanel} />
+          <Route path="/admin/programs" component={AdminPrograms} />
+          <Route path="/admin/news" component={AdminNews} />
+          {/* Catch-all route for 404 */}
           <Route component={NotFound} />
         </Switch>
       </main>

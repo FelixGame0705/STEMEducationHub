@@ -5,7 +5,13 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Lock, User } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
@@ -36,21 +42,15 @@ export default function AdminLogin() {
     setError("");
 
     try {
-      const response = await apiRequest<{ token: string; user: { id: number; username: string } }>(
-        "/api/admin/login",
-        {
-          method: "POST",
-          body: JSON.stringify(data),
-        }
-      );
-
+      const response = await apiRequest("/api/admin/login", "POST", data);
       // Store token in localStorage
       localStorage.setItem("adminToken", response.token);
       localStorage.setItem("adminUser", JSON.stringify(response.user));
-
+      console.log("Login successful:", response);
       // Navigate to admin dashboard
       navigate("/admin");
     } catch (error) {
+      console.error("Login error:", error);
       setError("Tên đăng nhập hoặc mật khẩu không chính xác");
     } finally {
       setIsLoading(false);
@@ -89,7 +89,9 @@ export default function AdminLogin() {
                 />
               </div>
               {errors.username && (
-                <p className="text-sm text-red-600">{errors.username.message}</p>
+                <p className="text-sm text-red-600">
+                  {errors.username.message}
+                </p>
               )}
             </div>
 
@@ -106,15 +108,13 @@ export default function AdminLogin() {
                 />
               </div>
               {errors.password && (
-                <p className="text-sm text-red-600">{errors.password.message}</p>
+                <p className="text-sm text-red-600">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -128,8 +128,14 @@ export default function AdminLogin() {
 
           <div className="mt-6 text-center text-sm text-gray-600">
             <p>Thông tin đăng nhập mặc định:</p>
-            <p>Tên đăng nhập: <code className="bg-gray-100 px-2 py-1 rounded">admin</code></p>
-            <p>Mật khẩu: <code className="bg-gray-100 px-2 py-1 rounded">123456</code></p>
+            <p>
+              Tên đăng nhập:{" "}
+              <code className="bg-gray-100 px-2 py-1 rounded">admin</code>
+            </p>
+            <p>
+              Mật khẩu:{" "}
+              <code className="bg-gray-100 px-2 py-1 rounded">123456</code>
+            </p>
           </div>
         </CardContent>
       </Card>
