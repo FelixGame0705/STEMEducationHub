@@ -26,11 +26,11 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: mysql://tien:123456@db:3306/stem_center
+      DATABASE_URL: mysql://tien:Lz8p#Wq9Bv!x3Rs@T1uE@db:3306/stem_center
       MYSQL_HOST: db
       MYSQL_PORT: 3306
       MYSQL_USER: tien
-      MYSQL_PASSWORD: 123456
+      MYSQL_PASSWORD: Lz8p#Wq9Bv!x3Rs@T1uE
       MYSQL_DATABASE: stem_center
 
       NODE_ENV: development
