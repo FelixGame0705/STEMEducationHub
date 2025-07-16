@@ -8,7 +8,7 @@ RUN npm install
 
 # Copy source
 COPY . .
-
+RUN npm install typescript -g
 # ✅ Build frontend và backend
 RUN npm run build
 
