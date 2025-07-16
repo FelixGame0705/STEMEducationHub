@@ -2,15 +2,15 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package.json và cài đúng dependencies
+# Copy lại package.json & package-lock.json
 COPY package*.json ./
 
-# ✅ Cài devDependencies luôn (bao gồm tsx)
+# ✅ Cài full dependencies, không thiếu tsx
 RUN npm install
 
 COPY . .
 
 EXPOSE 5000
 
-# ✅ Chạy server bằng npm run dev (dùng tsx)
-CMD ["npm", "run", "dev"]
+# ✅ Gọi trực tiếp tsx thay vì npm để loại trừ lỗi PATH
+CMD ["npx", "tsx", "server/index.ts"]
