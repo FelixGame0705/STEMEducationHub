@@ -46,16 +46,13 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // Fix: Only import vite-related stuff in development
-  if (process.env.NODE_ENV === "development") {
-    try {
-      const { setupVite } = await import('./vite.js');
-      await setupVite(app, server);
-    } catch (err) {
-      console.log("Development vite setup failed:", err);
-    }
-  } else {
-    // In production, serve static files directly
+  // Always use vite in development mode for Replit
+  try {
+    const { setupVite } = await import('./vite.js');
+    await setupVite(app, server);
+  } catch (err) {
+    console.log("Vite setup failed:", err);
+    // Fallback to static serving
     const path = await import('path');
     app.use(express.static(path.join(process.cwd(), 'client')));
     

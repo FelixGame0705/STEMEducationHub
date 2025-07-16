@@ -1,8 +1,6 @@
-import type { Student } from "@shared/schema";
-
-export const studentsData: Student[] = [
+import type { InsertStudent } from "@shared/schema";
+export const studentsData: InsertStudent[] = [
   {
-    id: 1,
     name: "Nguyễn Minh An",
     school: "THCS Nguyễn Trãi",
     grade: "Lớp 7A",
@@ -13,7 +11,6 @@ export const studentsData: Student[] = [
     year: 2024
   },
   {
-    id: 2,
     name: "Trần Thu Hà",
     school: "Tiểu học Trung Hòa",
     grade: "Lớp 5B",
@@ -24,7 +21,6 @@ export const studentsData: Student[] = [
     year: 2024
   },
   {
-    id: 3,
     name: "Lê Đức Anh",
     school: "THCS Lê Quý Đôn",
     grade: "Lớp 8C",
@@ -35,7 +31,6 @@ export const studentsData: Student[] = [
     year: 2024
   },
   {
-    id: 4,
     name: "Phạm Hoàng Nam",
     school: "THCS Trần Phú",
     grade: "Lớp 9A",
@@ -46,7 +41,6 @@ export const studentsData: Student[] = [
     year: 2024
   },
   {
-    id: 5,
     name: "Vũ Minh Tú",
     school: "THCS Nguyễn Du",
     grade: "Lớp 8B",
@@ -57,7 +51,6 @@ export const studentsData: Student[] = [
     year: 2023
   },
   {
-    id: 6,
     name: "Hoàng Thị Lan",
     school: "THCS Lý Thường Kiệt",
     grade: "Lớp 7C",

@@ -1,8 +1,6 @@
-import type { Event } from "@shared/schema";
-
-export const eventsData: Event[] = [
+import type { InsertEvent } from "@shared/schema";
+export const eventsData: InsertEvent[] = [
   {
-    id: 1,
     title: "Triển lãm Khoa học Công nghệ 2024",
     slug: "trien-lam-khoa-hoc-cong-nghe-2024",
     description: "Triển lãm các dự án STEM xuất sắc của học viên trong năm học 2023-2024. Sự kiện sẽ trưng bày các sản phẩm robot, ứng dụng AI, và các dự án IoT sáng tạo.",
@@ -13,7 +11,6 @@ export const eventsData: Event[] = [
     registrationRequired: true
   },
   {
-    id: 2,
     title: "Cuộc thi Lập trình Microbit",
     slug: "cuoc-thi-lap-trinh-microbit",
     description: "Cuộc thi lập trình Microbit dành cho học sinh tiểu học và THCS. Các đội sẽ thi đấu qua nhiều vòng với các thử thách về IoT và robotics.",
@@ -24,7 +21,6 @@ export const eventsData: Event[] = [
     registrationRequired: true
   },
   {
-    id: 3,
     title: "Workshop AI cho Phụ huynh",
     slug: "workshop-ai-cho-phu-huynh",
     description: "Workshop giúp phụ huynh hiểu về AI và cách AI đang thay đổi giáo dục. Bao gồm demo các dự án AI của học sinh và cách hỗ trợ con em học tập.",
@@ -35,7 +31,6 @@ export const eventsData: Event[] = [
     registrationRequired: true
   },
   {
-    id: 4,
     title: "Ngày hội STEM mở",
     slug: "ngay-hoi-stem-mo",
     description: "Sự kiện mở cửa để học sinh và phụ huynh tham quan trung tâm, trải nghiệm các lớp học, gặp gỡ giáo viên và tìm hiểu về các chương trình học.",
@@ -46,7 +41,6 @@ export const eventsData: Event[] = [
     registrationRequired: false
   },
   {
-    id: 5,
     title: "Hội thảo Giáo dục STEM",
     slug: "hoi-thao-giao-duc-stem",
     description: "Hội thảo chuyên môn dành cho giáo viên và nhà giáo dục về xu hướng giáo dục STEM hiện đại, phương pháp giảng dạy hiệu quả.",
@@ -57,7 +51,6 @@ export const eventsData: Event[] = [
     registrationRequired: true
   },
   {
-    id: 6,
     title: "Demo Day - Dự án học sinh",
     slug: "demo-day-du-an-hoc-sinh",
     description: "Ngày trình diễn dự án cuối khóa của học sinh các lớp Python, AI và Cloud Computing. Học sinh sẽ present dự án và nhận feedback từ chuyên gia.",

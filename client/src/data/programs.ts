@@ -1,8 +1,7 @@
-import type { Program } from "@shared/schema";
+import type { InsertProgram } from "@shared/schema";
 
-export const programsData: Program[] = [
+export const programsData: InsertProgram[] = [
   {
-    id: 1,
     title: "Otto Robot",
     slug: "otto-robot",
     description: "Học lập trình cơ bản qua việc điều khiển robot Otto, phát triển tư duy logic và kỹ năng giải quyết vấn đề",
@@ -12,7 +11,6 @@ export const programsData: Program[] = [
     color: "purple"
   },
   {
-    id: 2,
     title: "Microbit",
     slug: "microbit",
     description: "Khám phá thế giới IoT với Microbit, học cách tạo ra các dự án thông minh và tương tác",
@@ -22,7 +20,6 @@ export const programsData: Program[] = [
     color: "green"
   },
   {
-    id: 3,
     title: "Python",
     slug: "python",
     description: "Nền tảng lập trình Python từ cơ bản đến nâng cao, tạo ra những ứng dụng thực tế",
@@ -32,7 +29,6 @@ export const programsData: Program[] = [
     color: "blue"
   },
   {
-    id: 4,
     title: "Trí tuệ nhân tạo (AI)",
     slug: "ai",
     description: "Khám phá thế giới AI, học cách xây dựng các mô hình học máy đơn giản",
@@ -42,7 +38,6 @@ export const programsData: Program[] = [
     color: "pink"
   },
   {
-    id: 5,
     title: "Cloud Computing",
     slug: "cloud-computing",
     description: "Hiểu về điện toán đám mây và cách xây dựng ứng dụng trên nền tảng cloud",
@@ -52,7 +47,6 @@ export const programsData: Program[] = [
     color: "indigo"
   },
   {
-    id: 6,
     title: "Lập trình nâng cao",
     slug: "lap-trinh-nang-cao",
     description: "Phát triển kỹ năng lập trình chuyên sâu, chuẩn bị cho các kỳ thi Olympic tin học",
