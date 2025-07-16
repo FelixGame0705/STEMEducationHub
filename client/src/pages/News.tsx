@@ -2,7 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import NewsCard from "@/components/NewsCard";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import Pagination from "@/components/Pagination";
 import type { News } from "@shared/schema";
@@ -12,14 +18,17 @@ export default function News() {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 6;
 
-  const { data: newsData, isLoading } = useQuery<{news: News[], pagination: any}>({
+  const { data: newsData, isLoading } = useQuery<{
+    news: News[];
+    pagination: any;
+  }>({
     queryKey: ["/api/news", filterCategory, currentPage],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (filterCategory) params.append("category", filterCategory);
       params.append("page", currentPage.toString());
       params.append("limit", limit.toString());
-      
+
       const res = await fetch(`/api/news?${params}`);
       return res.json();
     },
@@ -44,10 +53,13 @@ export default function News() {
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <Select value={filterCategory} onValueChange={(value) => {
-            setFilterCategory(value);
-            setCurrentPage(1);
-          }}>
+          <Select
+            value={filterCategory || "all"}
+            onValueChange={(value) => {
+              setFilterCategory(value === "all" ? "" : value);
+              setCurrentPage(1);
+            }}
+          >
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Chọn danh mục" />
             </SelectTrigger>
@@ -77,7 +89,10 @@ export default function News() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-xl overflow-hidden space-y-4">
+              <div
+                key={i}
+                className="bg-white rounded-xl overflow-hidden space-y-4"
+              >
                 <Skeleton className="w-full h-48" />
                 <div className="p-6 space-y-4">
                   <Skeleton className="h-6 w-20" />
@@ -91,7 +106,9 @@ export default function News() {
           </div>
         ) : news.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">Không có tin tức nào phù hợp với bộ lọc.</p>
+            <p className="text-gray-500">
+              Không có tin tức nào phù hợp với bộ lọc.
+            </p>
           </div>
         ) : (
           <>
@@ -100,7 +117,7 @@ export default function News() {
                 <NewsCard key={newsItem.id} news={newsItem} />
               ))}
             </div>
-            
+
             {pagination && (
               <Pagination
                 currentPage={currentPage}

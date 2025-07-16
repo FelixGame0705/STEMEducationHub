@@ -128,7 +128,7 @@ export default function AdminNews() {
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="text-center md:text-left pl-[3%]">
           <h1 className="text-3xl font-bold text-gray-900">Quản lý Tin tức</h1>

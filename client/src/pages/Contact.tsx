@@ -47,9 +47,41 @@ export default function Contact() {
     },
   });
 
-  const onSubmit = (data: InsertContact) => {
-    contactMutation.mutate(data);
-  };
+const onSubmit = async (data: InsertContact) => {
+  try {
+    const res = await fetch("/api/contacts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) throw new Error("Lỗi gửi contact");
+
+    const result = await res.json();
+    console.log("Gửi contact thành công:", result);
+
+    // ✅ Hiển thị thông báo thành công
+    toast({
+      title: "Thành công!",
+      description: "Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.",
+    });
+
+    // ✅ Reset form
+    form.reset();
+
+  } catch (err) {
+    console.error("Gửi contact thất bại:", err);
+
+    // ✅ Hiển thị thông báo lỗi
+    toast({
+      title: "Lỗi!",
+      description: "Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại.",
+      variant: "destructive",
+    });
+  }
+};
+
+
 
   return (
     <div className="min-h-screen py-20 bg-gray-50">

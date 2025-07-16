@@ -170,7 +170,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button className="bg-accent-orange text-white px-8 py-3 hover:bg-orange-600 font-semibold">
-              Đăng ký học thử miễn phí
+              <Link href="/lien-he">Đăng ký học thử miễn phí</Link>
             </Button>
             <Button variant="outline" className="border-2 border-white text-blue-500 px-8 py-3 hover:bg-white hover:text-ocean-blue font-semibold">
               Tư vấn chương trình học

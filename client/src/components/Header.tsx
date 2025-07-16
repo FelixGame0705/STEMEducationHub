@@ -2,10 +2,8 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Lightbulb } from "lucide-react";
-
 export default function Header() {
   const [location] = useLocation();
-
   const navigation = [
     { name: "Chương trình học", href: "/chuong-trinh-hoc" },
     { name: "Học viên tiêu biểu", href: "/hoc-vien-tieu-bieu" },
@@ -25,7 +23,9 @@ export default function Header() {
               <div className="w-10 h-10 bg-ocean-blue rounded-lg flex items-center justify-center">
                 <Lightbulb className="w-6 h-6 text-white" />
               </div>
-              <span className="ml-3 text-xl font-bold text-gray-900">Bright Way Vietnam</span>
+              <span className="ml-3 text-xl font-bold text-gray-900">
+                Bright Way Vietnam
+              </span>
             </div>
           </Link>
 
@@ -48,10 +48,12 @@ export default function Header() {
 
           {/* CTA Button */}
           <div className="flex items-center space-x-4">
-            <Button className="bg-ocean-blue text-white hover:bg-blue-700">
-              Đăng ký học thử
+            <Button
+              className="bg-ocean-blue text-white hover:bg-blue-700"
+            >
+              <Link href="/lien-he">Đăng ký học thử</Link>
             </Button>
-            
+
             {/* Mobile menu */}
             <Sheet>
               <SheetTrigger asChild>

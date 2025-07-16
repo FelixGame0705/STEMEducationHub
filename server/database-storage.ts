@@ -371,13 +371,32 @@ export class DatabaseStorage implements IStorage {
     const result = await db.select().from(contacts).where(eq(contacts.id, id));
     return result[0];
   }
+async createContact(insertContact: InsertContact): Promise<Contact> {
+  await db.insert(contacts).values(insertContact);
 
-  async createContact(insertContact: InsertContact): Promise<Contact> {
-    const result = await db.insert(contacts).values(insertContact);
-    const contact = await this.getContact(Number(result.insertId));
-    if (!contact) throw new Error('Failed to create contact');
-    return contact;
-  }
+  // Truy lại theo toàn bộ thông tin (trong thực tế có thể thêm timestamp chính xác để phân biệt nếu cần)
+  const contact = await db
+    .select()
+    .from(contacts)
+    .where(
+      and(
+        eq(contacts.name, insertContact.name),
+        eq(contacts.email, insertContact.email),
+        eq(contacts.phone, insertContact.phone),
+        eq(contacts.subject, insertContact.subject),
+        eq(contacts.message, insertContact.message)
+      )
+    )
+    .orderBy(desc(contacts.submittedAt)) // để lấy bản mới nhất nếu có trùng
+    .limit(1)
+    .then((rows) => rows[0]);
+
+  if (!contact) throw new Error("Failed to retrieve inserted contact");
+
+  return contact;
+}
+
+
 
   async updateContact(id: number, updateData: Partial<Contact>): Promise<Contact> {
     await db.update(contacts).set(updateData).where(eq(contacts.id, id));

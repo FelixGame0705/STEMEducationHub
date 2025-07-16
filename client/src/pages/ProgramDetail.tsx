@@ -12,7 +12,11 @@ export default function ProgramDetail() {
   const [match, params] = useRoute("/chuong-trinh-hoc/:slug");
   const slug = params?.slug;
 
-  const { data: program, isLoading, error } = useQuery<Program>({
+  const {
+    data: program,
+    isLoading,
+    error,
+  } = useQuery<Program>({
     queryKey: ["/api/programs", slug],
     enabled: !!slug,
   });
@@ -75,26 +79,29 @@ export default function ProgramDetail() {
         </Link>
 
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <img 
-            src={program.image} 
+          <img
+            src={program.image}
             alt={program.title}
-            className="w-full h-64 object-cover"
+            className="w-full h-full object-cover"
           />
-          
+
           <div className="p-8">
             <div className="mb-6">
-              <Badge className={colorClasses[program.color as keyof typeof colorClasses] || "bg-gray-100 text-gray-800"}>
+              <Badge
+                className={
+                  colorClasses[program.color as keyof typeof colorClasses] ||
+                  "bg-gray-100 text-gray-800"
+                }
+              >
                 {program.ageRange}
               </Badge>
             </div>
-            
+
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {program.title}
             </h1>
-            
-            <p className="text-lg text-gray-600 mb-8">
-              {program.description}
-            </p>
+
+            <p className="text-lg text-gray-600 mb-8">{program.description}</p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <Card>
@@ -104,15 +111,17 @@ export default function ProgramDetail() {
                   <p className="text-gray-600">{program.ageRange}</p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardContent className="p-6 text-center">
                   <Clock className="w-8 h-8 text-ocean-blue mx-auto mb-4" />
-                  <h3 className="font-semibold text-gray-900 mb-2">Thời lượng</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">
+                    Thời lượng
+                  </h3>
                   <p className="text-gray-600">12 buổi học</p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardContent className="p-6 text-center">
                   <Target className="w-8 h-8 text-ocean-blue mx-auto mb-4" />
@@ -123,16 +132,28 @@ export default function ProgramDetail() {
             </div>
 
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Mục tiêu học tập</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Mục tiêu học tập
+              </h2>
               <p className="text-gray-600">{program.objectives}</p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button className="bg-accent-orange text-white hover:bg-orange-600">
-                Đăng ký học thử miễn phí
+                <Link href="/lien-he">Đăng ký học thử miễn phí</Link>
               </Button>
-              <Button variant="outline" className="border-ocean-blue text-ocean-blue hover:bg-ocean-blue hover:text-white">
-                Tư vấn chương trình
+              <Button
+                asChild
+                variant="outline"
+                className="border-ocean-blue text-ocean-blue hover:bg-ocean-blue hover:text-white"
+              >
+                <a
+                  href="https://www.facebook.com/profile.php?id=61577624084677"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Tư vấn chương trình
+                </a>
               </Button>
             </div>
           </div>

@@ -20,6 +20,9 @@ import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminPanel from "@/pages/admin/AdminPanel";
 import AdminPrograms from "./pages/admin/AdminPrograms";
 import AdminNews from "./pages/admin/AdminNews";
+import AdminStudents from "./pages/admin/AdminStudents";
+import AdminEvents from "./pages/admin/AdminEvents";
+import AdminContacts from "./pages/admin/AdminContacts";
 
 function Router() {
   return (
@@ -41,6 +44,13 @@ function Router() {
           <Route path="/admin/" component={AdminPanel} />
           <Route path="/admin/programs" component={AdminPrograms} />
           <Route path="/admin/news" component={AdminNews} />
+          <Route path="/admin/students" component={AdminStudents} />
+          <Route path="/admin/events" component={AdminEvents} />
+          <Route path="/admin/contacts" component={AdminContacts} />
+          
+          {/* Catch-all route for 404 */}
+          
+          {/* Admin routes */}
           {/* Catch-all route for 404 */}
           <Route component={NotFound} />
         </Switch>

@@ -5,13 +5,18 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { Link } from "wouter";
+import DOMPurify from "dompurify";
 import type { News } from "@shared/schema";
 
 export default function NewsDetail() {
   const [match, params] = useRoute("/tin-tuc/:slug");
   const slug = params?.slug;
 
-  const { data: news, isLoading, error } = useQuery<News>({
+  const {
+    data: news,
+    isLoading,
+    error,
+  } = useQuery<News>({
     queryKey: ["/api/news", slug],
     enabled: !!slug,
   });
@@ -58,7 +63,7 @@ export default function NewsDetail() {
   const categoryColors = {
     "TIN TỨC": "bg-ocean-blue text-white",
     "SỰ KIỆN": "bg-green-500 text-white",
-    "WORKSHOP": "bg-purple-500 text-white",
+    WORKSHOP: "bg-purple-500 text-white",
   };
 
   return (
@@ -72,46 +77,53 @@ export default function NewsDetail() {
         </Link>
 
         <article className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <img 
-            src={news.image} 
+          <img
+            src={news.image}
             alt={news.title}
-            className="w-full h-64 object-cover"
+            className="w-full h-full object-cover"
           />
-          
+
           <div className="p-8">
             <div className="flex items-center mb-6">
-              <Badge className={categoryColors[news.category as keyof typeof categoryColors] || "bg-gray-500 text-white"}>
+              <Badge
+                className={
+                  categoryColors[
+                    news.category as keyof typeof categoryColors
+                  ] || "bg-gray-500 text-white"
+                }
+              >
                 {news.category}
               </Badge>
               <div className="flex items-center text-gray-500 ml-4">
                 <Calendar className="w-4 h-4 mr-2" />
-                {new Date(news.publishedAt).toLocaleDateString('vi-VN', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
+                {new Date(news.publishedAt).toLocaleDateString("vi-VN", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
                 })}
               </div>
             </div>
-            
+
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               {news.title}
             </h1>
-            
+
             <div className="prose prose-lg max-w-none">
-              <p className="text-lg text-gray-600 mb-6">
-                {news.excerpt}
-              </p>
-              
-              <div className="text-gray-700 whitespace-pre-wrap">
-                {news.content}
-              </div>
+              <p className="text-lg text-gray-600 mb-6">{news.excerpt}</p>
+
+              <div
+                className="text-gray-700 prose max-w-none"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(news.content),
+                }}
+              />
             </div>
           </div>
         </article>
 
         <div className="mt-8 text-center">
           <Button className="bg-accent-orange text-white hover:bg-orange-600">
-            Đăng ký học thử miễn phí
+            <Link href="/lien-he">Đăng ký học thử miễn phí</Link>
           </Button>
         </div>
       </div>
