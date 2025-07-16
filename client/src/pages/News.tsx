@@ -4,21 +4,29 @@ import NewsCard from "@/components/NewsCard";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import Pagination from "@/components/Pagination";
 import type { News } from "@shared/schema";
 
 export default function News() {
   const [filterCategory, setFilterCategory] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 6;
 
-  const { data: news = [], isLoading } = useQuery<News[]>({
-    queryKey: ["/api/news", filterCategory],
+  const { data: newsData, isLoading } = useQuery<{news: News[], pagination: any}>({
+    queryKey: ["/api/news", filterCategory, currentPage],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (filterCategory) params.append("category", filterCategory);
+      params.append("page", currentPage.toString());
+      params.append("limit", limit.toString());
       
       const res = await fetch(`/api/news?${params}`);
       return res.json();
     },
   });
+
+  const news = newsData?.news || [];
+  const pagination = newsData?.pagination;
 
   const categories = ["TIN TỨC", "SỰ KIỆN", "WORKSHOP"];
 
@@ -36,12 +44,15 @@ export default function News() {
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <Select value={filterCategory} onValueChange={setFilterCategory}>
+          <Select value={filterCategory} onValueChange={(value) => {
+            setFilterCategory(value);
+            setCurrentPage(1);
+          }}>
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Chọn danh mục" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Tất cả danh mục</SelectItem>
+              <SelectItem value="all">Tất cả danh mục</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category} value={category}>
                   {category}
@@ -50,10 +61,13 @@ export default function News() {
             </SelectContent>
           </Select>
 
-          {filterCategory && (
+          {filterCategory && filterCategory !== "all" && (
             <Button
               variant="outline"
-              onClick={() => setFilterCategory("")}
+              onClick={() => {
+                setFilterCategory("");
+                setCurrentPage(1);
+              }}
             >
               Xóa bộ lọc
             </Button>
@@ -80,11 +94,21 @@ export default function News() {
             <p className="text-gray-500">Không có tin tức nào phù hợp với bộ lọc.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {news.map((newsItem) => (
-              <NewsCard key={newsItem.id} news={newsItem} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {news.map((newsItem) => (
+                <NewsCard key={newsItem.id} news={newsItem} />
+              ))}
+            </div>
+            
+            {pagination && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={pagination.pages}
+                onPageChange={setCurrentPage}
+              />
+            )}
+          </>
         )}
       </div>
     </div>

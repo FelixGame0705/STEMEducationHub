@@ -16,6 +16,8 @@ import About from "@/pages/About";
 import Careers from "@/pages/Careers";
 import Contact from "@/pages/Contact";
 import NotFound from "@/pages/not-found";
+import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminPanel from "@/pages/admin/AdminPanel";
 
 function Router() {
   return (
@@ -33,6 +35,8 @@ function Router() {
           <Route path="/ve-chung-toi" component={About} />
           <Route path="/tuyen-dung" component={Careers} />
           <Route path="/lien-he" component={Contact} />
+          <Route path="/admin/login" component={AdminLogin} />
+          <Route path="/admin/*" component={AdminPanel} />
           <Route component={NotFound} />
         </Switch>
       </main>

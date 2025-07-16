@@ -8,21 +8,33 @@ import { Link } from "wouter";
 import type { Program, Student, News } from "@shared/schema";
 
 export default function Home() {
-  const { data: programs = [], isLoading: programsLoading } = useQuery<Program[]>({
+  const { data: programsData, isLoading: programsLoading } = useQuery<{programs: Program[], pagination: any}>({
     queryKey: ["/api/programs"],
-  });
-
-  const { data: students = [], isLoading: studentsLoading } = useQuery<Student[]>({
-    queryKey: ["/api/students"],
-  });
-
-  const { data: featuredNews = [], isLoading: newsLoading } = useQuery<News[]>({
-    queryKey: ["/api/news"],
     queryFn: async () => {
-      const res = await fetch("/api/news?featured=true");
+      const res = await fetch("/api/programs?limit=6");
       return res.json();
     },
   });
+
+  const { data: studentsData, isLoading: studentsLoading } = useQuery<{students: Student[], pagination: any}>({
+    queryKey: ["/api/students"],
+    queryFn: async () => {
+      const res = await fetch("/api/students?limit=6");
+      return res.json();
+    },
+  });
+
+  const { data: newsData, isLoading: newsLoading } = useQuery<{news: News[], pagination: any}>({
+    queryKey: ["/api/news"],
+    queryFn: async () => {
+      const res = await fetch("/api/news?featured=true&limit=6");
+      return res.json();
+    },
+  });
+
+  const programs = programsData?.programs || [];
+  const students = studentsData?.students || [];
+  const featuredNews = newsData?.news || [];
 
   return (
     <div className="min-h-screen">

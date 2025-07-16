@@ -4,23 +4,31 @@ import StudentCard from "@/components/StudentCard";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import Pagination from "@/components/Pagination";
 import type { Student } from "@shared/schema";
 
 export default function Students() {
   const [filterProgram, setFilterProgram] = useState<string>("");
   const [filterYear, setFilterYear] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 6;
 
-  const { data: students = [], isLoading } = useQuery<Student[]>({
-    queryKey: ["/api/students", filterProgram, filterYear],
+  const { data: studentsData, isLoading } = useQuery<{students: Student[], pagination: any}>({
+    queryKey: ["/api/students", filterProgram, filterYear, currentPage],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (filterProgram) params.append("program", filterProgram);
       if (filterYear) params.append("year", filterYear);
+      params.append("page", currentPage.toString());
+      params.append("limit", limit.toString());
       
       const res = await fetch(`/api/students?${params}`);
       return res.json();
     },
   });
+
+  const students = studentsData?.students || [];
+  const pagination = studentsData?.pagination;
 
   const programs = ["Otto Robot", "Microbit", "Python", "AI", "Cloud Computing"];
   const years = [2024, 2023, 2022];
@@ -39,12 +47,15 @@ export default function Students() {
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <Select value={filterProgram} onValueChange={setFilterProgram}>
+          <Select value={filterProgram} onValueChange={(value) => {
+            setFilterProgram(value);
+            setCurrentPage(1);
+          }}>
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Chọn chương trình" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Tất cả chương trình</SelectItem>
+              <SelectItem value="all">Tất cả chương trình</SelectItem>
               {programs.map((program) => (
                 <SelectItem key={program} value={program}>
                   {program}
@@ -53,12 +64,15 @@ export default function Students() {
             </SelectContent>
           </Select>
 
-          <Select value={filterYear} onValueChange={setFilterYear}>
+          <Select value={filterYear} onValueChange={(value) => {
+            setFilterYear(value);
+            setCurrentPage(1);
+          }}>
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Chọn năm" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Tất cả năm</SelectItem>
+              <SelectItem value="all">Tất cả năm</SelectItem>
               {years.map((year) => (
                 <SelectItem key={year} value={year.toString()}>
                   {year}
@@ -67,12 +81,13 @@ export default function Students() {
             </SelectContent>
           </Select>
 
-          {(filterProgram || filterYear) && (
+          {(filterProgram && filterProgram !== "all") || (filterYear && filterYear !== "all") && (
             <Button
               variant="outline"
               onClick={() => {
                 setFilterProgram("");
                 setFilterYear("");
+                setCurrentPage(1);
               }}
             >
               Xóa bộ lọc
@@ -97,11 +112,21 @@ export default function Students() {
             <p className="text-gray-500">Không tìm thấy học viên nào phù hợp với bộ lọc.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {students.map((student) => (
-              <StudentCard key={student.id} student={student} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {students.map((student) => (
+                <StudentCard key={student.id} student={student} />
+              ))}
+            </div>
+            
+            {pagination && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={pagination.pages}
+                onPageChange={setCurrentPage}
+              />
+            )}
+          </>
         )}
       </div>
     </div>
