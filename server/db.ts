@@ -1,18 +1,37 @@
-// src/lib/db.ts (hoặc wherever you place it)
+// Database configuration - adapted for Replit environment
 import { createConnection } from 'mysql2/promise';
 import { drizzle } from 'drizzle-orm/mysql2';
-import * as schema from '@shared/schema'; // Đảm bảo đường dẫn này đúng với file schema.ts
-import 'dotenv/config'; // Đảm bảo env được load nếu gọi từ CLI hoặc không dùng Next.js runtime
+import * as schema from '@shared/schema';
+import 'dotenv/config';
 
-const connection = await createConnection({
-  host: process.env.MYSQL_HOST || 'localhost',
-  port: parseInt(process.env.MYSQL_PORT || '3306'),
-  user: process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQL_PASSWORD || '123456',
-  database: process.env.MYSQL_DATABASE || 'stem_center',
-});
+let connection: any = null;
+let db: any = null;
 
-export const db = drizzle(connection, {
-  schema,
-  mode: 'default', // hoặc 'planetscale' nếu bạn dùng Planetscale
-});
+export async function getDb() {
+  if (!db) {
+    try {
+      // Try to connect to database if environment variables are available
+      if (process.env.MYSQL_HOST && process.env.MYSQL_HOST !== 'db') {
+        connection = await createConnection({
+          host: process.env.MYSQL_HOST,
+          port: parseInt(process.env.MYSQL_PORT || '3306'),
+          user: process.env.MYSQL_USER || 'root',
+          password: process.env.MYSQL_PASSWORD,
+          database: process.env.MYSQL_DATABASE,
+        });
+        
+        db = drizzle(connection, {
+          schema,
+          mode: 'default',
+        });
+      }
+    } catch (error) {
+      console.log('Database connection failed, using in-memory storage');
+      db = null;
+    }
+  }
+  return db;
+}
+
+// For backward compatibility - will be null if no database available
+export { db };

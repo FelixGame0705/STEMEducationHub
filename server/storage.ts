@@ -26,7 +26,7 @@ import { newsData } from "@/data/news";
 import { programsData } from "@/data/programs";
 import { studentsData } from "@/data/students";
 import bcrypt from "bcryptjs";
-import { DatabaseStorage } from "./database-storage";
+// Using in-memory storage for Replit compatibility
 
 export interface IStorage {
   // Admin Users
@@ -156,9 +156,9 @@ export class MemStorage implements IStorage {
     // Initialize students
     studentsData.forEach((student, index) => {
       const fullStudent: Student = {
+        ...student,
         id: index + 1,
         createdAt: new Date(),
-        ...student,
       };
       this.studentsData.set(fullStudent.id, fullStudent);
     });
@@ -167,9 +167,9 @@ export class MemStorage implements IStorage {
     // Initialize news
     newsData.forEach((newsItem, index) => {
       const fullNews: News = {
+        ...newsItem,
         id: index + 1,
         createdAt: new Date(),
-        ...newsItem,
         featured: newsItem.featured ?? false,
       };
       this.newsData.set(fullNews.id, fullNews);
@@ -179,9 +179,9 @@ export class MemStorage implements IStorage {
     // Initialize events
     eventsData.forEach((event, index) => {
       const fullEvent: Event = {
+        ...event,
         id: index + 1,
         createdAt: new Date(),
-        ...event,
         registrationRequired: event.registrationRequired ?? false,
       };
       this.eventsData.set(fullEvent.id, fullEvent);
@@ -207,9 +207,9 @@ export class MemStorage implements IStorage {
 
     recruitmentData.forEach((recruitment, index) => {
       const fullRecruitment: Recruitment = {
+        ...recruitment,
         id: index + 1,
         createdAt: new Date(),
-        ...recruitment,
         salary: recruitment.salary ?? null,
       };
       this.recruitmentsData.set(fullRecruitment.id, fullRecruitment);
@@ -224,7 +224,7 @@ export class MemStorage implements IStorage {
   async getAdminUserByUsername(
     username: string,
   ): Promise<AdminUser | undefined> {
-    for (const user of this.adminUsersData.values()) {
+    for (const user of Array.from(this.adminUsersData.values())) {
       if (user.username === username) {
         return user;
       }
@@ -278,7 +278,7 @@ export class MemStorage implements IStorage {
   }
 
   async getProgramBySlug(slug: string): Promise<Program | undefined> {
-    for (const program of this.programsData.values()) {
+    for (const program of Array.from(this.programsData.values())) {
       if (program.slug === slug) {
         return program;
       }
@@ -425,7 +425,7 @@ export class MemStorage implements IStorage {
   }
 
   async getNewsBySlug(slug: string): Promise<News | undefined> {
-    for (const news of this.newsData.values()) {
+    for (const news of Array.from(this.newsData.values())) {
       if (news.slug === slug) {
         return news;
       }
@@ -453,9 +453,10 @@ export class MemStorage implements IStorage {
 
   async createNews(insertNews: InsertNews): Promise<News> {
     const news: News = {
-      id: this.nextId.news++,
       ...insertNews,
+      id: this.nextId.news++,
       createdAt: new Date(),
+      featured: insertNews.featured ?? false,
     };
     this.newsData.set(news.id, news);
     return news;
@@ -508,7 +509,7 @@ export class MemStorage implements IStorage {
   }
 
   async getEventBySlug(slug: string): Promise<Event | undefined> {
-    for (const event of this.eventsData.values()) {
+    for (const event of Array.from(this.eventsData.values())) {
       if (event.slug === slug) {
         return event;
       }
@@ -528,9 +529,10 @@ export class MemStorage implements IStorage {
 
   async createEvent(insertEvent: InsertEvent): Promise<Event> {
     const event: Event = {
-      id: this.nextId.events++,
       ...insertEvent,
+      id: this.nextId.events++,
       createdAt: new Date(),
+      registrationRequired: insertEvent.registrationRequired ?? false,
     };
     this.eventsData.set(event.id, event);
     return event;
@@ -585,7 +587,7 @@ export class MemStorage implements IStorage {
   }
 
   async getRecruitmentBySlug(slug: string): Promise<Recruitment | undefined> {
-    for (const recruitment of this.recruitmentsData.values()) {
+    for (const recruitment of Array.from(this.recruitmentsData.values())) {
       if (recruitment.slug === slug) {
         return recruitment;
       }
@@ -597,9 +599,10 @@ export class MemStorage implements IStorage {
     insertRecruitment: InsertRecruitment,
   ): Promise<Recruitment> {
     const recruitment: Recruitment = {
-      id: this.nextId.recruitments++,
       ...insertRecruitment,
+      id: this.nextId.recruitments++,
       createdAt: new Date(),
+      salary: insertRecruitment.salary ?? null,
     };
     this.recruitmentsData.set(recruitment.id, recruitment);
     return recruitment;
@@ -681,5 +684,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Use memory storage since database is not available
-export const storage = new DatabaseStorage();
+// Use memory storage for Replit compatibility
+export const storage = new MemStorage();

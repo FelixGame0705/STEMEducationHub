@@ -1,8 +1,6 @@
-import type { News } from "@shared/schema";
-
-export const newsData: News[] = [
+import type { InsertNews } from "@shared/schema";
+export const newsData: InsertNews[] = [
   {
-    id: 1,
     title: "Khai trương lớp học AI mới dành cho học sinh THCS",
     slug: "khai-truong-lop-hoc-ai-moi",
     excerpt: "Trung tâm vừa ra mắt chương trình học AI cơ bản dành cho học sinh từ 13-16 tuổi với phương pháp giảng dạy hiện đại và thực hành nhiều.",
@@ -13,7 +11,6 @@ export const newsData: News[] = [
     featured: true
   },
   {
-    id: 2,
     title: "Cuộc thi Robotics toàn quốc - Học viên STEM Center đạt 3 giải",
     slug: "cuoc-thi-robotics-toan-quoc",
     excerpt: "Trong cuộc thi Robotics toàn quốc năm 2024, các học viên của trung tâm đã đạt được những thành tích ấn tượng với 1 giải nhất, 1 giải nhì và 1 giải ba.",
@@ -24,7 +21,6 @@ export const newsData: News[] = [
     featured: true
   },
   {
-    id: 3,
     title: "Workshop 'Python cho người mới bắt đầu' - Miễn phí cho phụ huynh",
     slug: "workshop-python-cho-nguoi-moi-bat-dau",
     excerpt: "Một workshop đặc biệt dành cho phụ huynh muốn hiểu rõ hơn về lập trình Python và cách con em học tập tại trung tâm.",
@@ -35,7 +31,6 @@ export const newsData: News[] = [
     featured: false
   },
   {
-    id: 4,
     title: "Cập nhật chương trình Cloud Computing cho học sinh THPT",
     slug: "cap-nhat-chuong-trinh-cloud-computing",
     excerpt: "Trung tâm bổ sung chương trình Cloud Computing nâng cao dành cho học sinh THPT, giúp các em chuẩn bị cho ngành IT.",
@@ -46,7 +41,6 @@ export const newsData: News[] = [
     featured: true
   },
   {
-    id: 5,
     title: "Chương trình hè đặc biệt: STEM Camp 2024",
     slug: "stem-camp-2024",
     excerpt: "Trại hè STEM 2024 với nhiều hoạt động thú vị, giúp trẻ em khám phá khoa học công nghệ trong môi trường vui nhộn.",
