@@ -47,14 +47,14 @@ app.use((req, res, next) => {
   });
 
   // Fix: Only import vite-related stuff in development
-  if (process.env.NODE_ENV === "development") {
-    try {
-      const { setupVite } = await import('./vite.js');
-      await setupVite(app, server);
-    } catch (err) {
-      console.log("Development vite setup failed:", err);
-    }
-  } else {
+if (process.env.NODE_ENV === "production") {
+  const path = await import("path");
+  app.use(express.static(path.join(process.cwd(), "client")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(process.cwd(), "client", "index.html"));
+  });
+}
+ else {
     // In production, serve static files directly
     const path = await import('path');
     app.use(express.static(path.join(process.cwd(), 'client')));
